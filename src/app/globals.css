@@ -3,6 +3,15 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  
+  /* Dashboard Colors - Light Mode */
+  --dashboard-bg: #f9fafb;
+  --dashboard-card: #ffffff;
+  --dashboard-border: #e5e7eb;
+  --dashboard-text-primary: #111827;
+  --dashboard-text-secondary: #6b7280;
+  --dashboard-accent: #06b6d4;
+  --dashboard-accent-hover: #0891b2;
 }
 
 @theme inline {
@@ -10,12 +19,30 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  
+  /* Dashboard Theme Colors */
+  --color-dashboard-bg: var(--dashboard-bg);
+  --color-dashboard-card: var(--dashboard-card);
+  --color-dashboard-border: var(--dashboard-border);
+  --color-dashboard-text-primary: var(--dashboard-text-primary);
+  --color-dashboard-text-secondary: var(--dashboard-text-secondary);
+  --color-dashboard-accent: var(--dashboard-accent);
+  --color-dashboard-accent-hover: var(--dashboard-accent-hover);
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
     --background: #0a0a0a;
     --foreground: #ededed;
+    
+    /* Dashboard Colors - Dark Mode */
+    --dashboard-bg: #111827;
+    --dashboard-card: #1f2937;
+    --dashboard-border: #374151;
+    --dashboard-text-primary: #ffffff;
+    --dashboard-text-secondary: #9ca3af;
+    --dashboard-accent: #22d3ee;
+    --dashboard-accent-hover: #06b6d4;
   }
 }
 
@@ -23,4 +50,113 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Dashboard Specific Styles */
+.dashboard-container {
+  background: var(--dashboard-bg);
+  color: var(--dashboard-text-primary);
+  min-height: 100vh;
+}
+
+.dashboard-card {
+  background: var(--dashboard-card);
+  border: 1px solid var(--dashboard-border);
+  border-radius: 0.75rem;
+}
+
+.dashboard-text-secondary {
+  color: var(--dashboard-text-secondary);
+}
+
+.dashboard-accent {
+  color: var(--dashboard-accent);
+}
+
+.dashboard-accent-bg {
+  background: var(--dashboard-accent);
+}
+
+/* Backdrop Blur Effect */
+.backdrop-blur-header {
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  background: rgba(17, 24, 39, 0.8);
+  border-bottom: 1px solid rgba(55, 65, 81, 0.5);
+}
+
+@media (prefers-color-scheme: light) {
+  .backdrop-blur-header {
+    background: rgba(249, 250, 251, 0.8);
+    border-bottom: 1px solid rgba(229, 231, 235, 0.5);
+  }
+}
+
+/* Gradient Backgrounds */
+.gradient-cyan-blue {
+  background: linear-gradient(135deg, #06b6d4 0%, #2563eb 100%);
+}
+
+.gradient-green-emerald {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+}
+
+.gradient-pink-rose {
+  background: linear-gradient(135deg, #ec4899 0%, #f43f5e 100%);
+}
+
+.gradient-orange-red {
+  background: linear-gradient(135deg, #f97316 0%, #ef4444 100%);
+}
+
+.gradient-purple-indigo {
+  background: linear-gradient(135deg, #a855f7 0%, #6366f1 100%);
+}
+
+/* Animaciones de transición entre pantallas */
+.page-transition {
+  transition: opacity 200ms ease-in-out, transform 200ms ease-in-out;
+}
+
+.page-enter {
+  opacity: 0;
+  transform: translateX(10px) scale(0.98);
+}
+
+.page-exit {
+  opacity: 0;
+  transform: translateX(-10px) scale(0.98);
+}
+
+.page-active {
+  opacity: 1;
+  transform: translateX(0) scale(1);
+}
+
+/* Animaciones escalonadas para elementos */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.4s ease-out forwards;
+}
+
+/* Estados iniciales para elementos animados */
+.animate-on-mount {
+  opacity: 0;
+  transform: translateY(20px) scale(0.95);
+}
+
+/* Suavizar scroll en las transiciones */
+.smooth-scroll {
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
 }

@@ -1,0 +1,17 @@
+version: "3"
+
+services:
+
+  insured:
+    build:
+      context: ./
+    ports:
+      - 3004:3004
+    image: cmatus/serviclick-insured:1.0.0
+    container_name: insured
+    networks:
+      - serviclick-network
+
+networks:
+  serviclick-network:
+    driver: bridge
