@@ -4,7 +4,7 @@ import jwt from "jsonwebtoken";
 
 import { IUser } from "@/store/interfaces/user";
 
-import { validate } from "../services/auth.service";
+import { validate, sendPasswordRecoveryEmail } from "../services/auth.service";
 
 import { insuredStore } from "./insured.store";
 
@@ -14,6 +14,7 @@ interface authState {
   isError: boolean;
   error: string;
   validate: (email: string, password: string) => void;
+  sendPasswordRecoveryEmail: (rut: string, email: string) => void;
 }
 
 const initialData: IUser = {
@@ -84,6 +85,42 @@ export const authStore = create<authState>()(
               isLoading: false,
             }));
           }
+        } catch (e) {
+          set((state) => ({
+            ...state,
+            isLoading: false,
+            isError: true,
+            error: (e as Error).message,
+          }));
+        }
+      },
+
+      sendPasswordRecoveryEmail: async (rut: string, email: string) => {
+        try {
+          set((state) => ({
+            ...state,
+            isLoading: true,
+            isError: false,
+            error: "",
+          }));
+          const { data, success } = await sendPasswordRecoveryEmail(rut, email);
+
+          if (!success) {
+            set((state) => ({
+              ...state,
+              isLoading: false,
+              isError: true,
+              error: data.error,
+            }));
+            return;
+          }
+
+          set((state) => ({
+            ...state,
+            isLoading: false,
+            isError: false,
+            error: "",
+          }));
         } catch (e) {
           set((state) => ({
             ...state,

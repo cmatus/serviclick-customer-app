@@ -69,10 +69,12 @@ const ReimbursementDetail: React.FC<ReimbursementDetailProps> = ({
   // Prestaciones = Assistances del producto seleccionado
   const prestacionesOptions = useMemo(() => {
     if (!selectedProduct?.assistances) return [];
-    return selectedProduct.assistances.map((assistance) => ({
-      value: assistance.id,
-      text: assistance.name,
-    }));
+    return selectedProduct.assistances
+      .filter((assistance) => assistance.isRefundable)
+      .map((assistance) => ({
+        value: assistance.id,
+        text: assistance.name,
+      }));
   }, [selectedProduct]);
 
   // Validación para habilitar el botón de envío
@@ -669,13 +671,38 @@ const ReimbursementDetail: React.FC<ReimbursementDetailProps> = ({
             data={getFormData()}
             onChange={handleFormChange}
           />
-          <Form
-            title="Datos de Cuenta Bancaria"
-            fields={bankFormFields}
-            editable={true}
-            data={getFormData()}
-            onChange={handleFormChange}
-          />
+          <div>
+            <Form
+              title="Datos de Cuenta Bancaria"
+              fields={bankFormFields}
+              editable={true}
+              data={getFormData()}
+              onChange={handleFormChange}
+            />
+            <div className="mt-3 bg-amber-500/10 border border-amber-500/50 rounded-lg p-4 flex gap-3">
+              <div className="flex-shrink-0 mt-0.5">
+                <svg
+                  className="w-5 h-5 text-amber-400"
+                  fill="currentColor"
+                  viewBox="0 0 20 20">
+                  <path
+                    fillRule="evenodd"
+                    d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+              </div>
+              <div className="flex-1">
+                <p className="text-amber-300 text-sm font-semibold">
+                  Importante
+                </p>
+                <p className="text-amber-200/90 text-sm mt-1">
+                  La cuenta bancaria debe estar a nombre del titular del
+                  producto. Reembolsos a cuentas de terceros serán rechazados.
+                </p>
+              </div>
+            </div>
+          </div>
           <Card>
             <h2 className="text-lg lg:text-xl font-bold text-white mb-6">
               Documentos de Respaldo
@@ -722,9 +749,22 @@ const ReimbursementDetail: React.FC<ReimbursementDetailProps> = ({
                     </span>
                     {!isDragOver && !isMobile && " o arrastra archivos aquí"}
                   </p>
-                  <p className="text-xs text-[#e6eaf3]/40 mt-1">
-                    Imágenes y PDF (MAX. 5MB)
-                    {isMobile && " • Usa el botón de cámara abajo"}
+                  <p className="text-xs mt-2">
+                    <span className="text-[#e6eaf3]/60">Formatos: </span>
+                    <span className="text-cyan-400 font-semibold">
+                      JPG, PNG, PDF
+                    </span>
+                    <span className="text-[#e6eaf3]/40 mx-1">•</span>
+                    <span className="text-[#e6eaf3]/60">Máx: </span>
+                    <span className="text-cyan-400 font-semibold">5MB</span>
+                    {isMobile && (
+                      <>
+                        <span className="text-[#e6eaf3]/40 mx-1">•</span>
+                        <span className="text-[#e6eaf3]/60">
+                          Usa el botón de cámara abajo
+                        </span>
+                      </>
+                    )}
                   </p>
                 </div>
                 <input

@@ -7,9 +7,12 @@ interface InputTextProps {
   value: string | number;
   placeholder?: string;
   onChange?: (value: string) => void;
+  onFocus?: () => void;
+  onBlur?: () => void;
   enabled?: boolean;
   required?: boolean;
   rows?: number; // Para textarea
+  error?: string; // Mensaje de error
 }
 
 const InputText: React.FC<InputTextProps> = ({
@@ -18,9 +21,12 @@ const InputText: React.FC<InputTextProps> = ({
   value,
   placeholder = "",
   onChange,
+  onFocus,
+  onBlur,
   enabled = true,
   required = false,
   rows = 3, // Valor por defecto para textarea
+  error,
 }) => {
   const [showPassword, setShowPassword] = useState(false);
 
@@ -56,6 +62,8 @@ const InputText: React.FC<InputTextProps> = ({
     const baseProps = {
       value: value || "",
       onChange: handleChange,
+      onFocus,
+      onBlur,
       placeholder,
       required,
     };
@@ -113,42 +121,45 @@ const InputText: React.FC<InputTextProps> = ({
     type === "textarea" ? "relative min-h-[50px]" : "relative h-[50px]";
 
   return (
-    <div className={containerClass}>
-      <label className="absolute top-1 left-3 text-xs font-medium text-[#e6eaf3]/60 uppercase tracking-wide z-10">
-        {label}
-      </label>
-      {type === "textarea" ? (
-        <textarea
-          value={value || ""}
-          onChange={handleChange}
-          placeholder={placeholder}
-          required={required}
-          rows={rows}
-          className="w-full bg-[#232a3a] border border-[#2a3441] rounded-lg px-3 pt-5 pb-1 text-white text-sm focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent resize-none"
-        />
-      ) : (
-        <>
-          <input
-            {...getInputProps()}
-            className={`w-full h-full bg-[#232a3a] border border-[#2a3441] rounded-lg px-3 pt-5 pb-1 text-white text-sm focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent ${
-              type === "password" ? "pr-10" : ""
-            }`}
+    <div>
+      <div className={containerClass}>
+        <label className="absolute top-1 left-3 text-xs font-medium text-[#e6eaf3]/60 uppercase tracking-wide z-10">
+          {label}
+        </label>
+        {type === "textarea" ? (
+          <textarea
+            value={value || ""}
+            onChange={handleChange}
+            placeholder={placeholder}
+            required={required}
+            rows={rows}
+            className="w-full bg-[#232a3a] border border-[#2a3441] rounded-lg px-3 pt-5 pb-1 text-white text-sm focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent resize-none"
           />
-          {type === "password" && (
-            <button
-              type="button"
-              onClick={togglePasswordVisibility}
-              className="absolute right-3 top-1/2 transform -translate-y-1/2 text-[#e6eaf3]/60 hover:text-[#e6eaf3] transition-colors"
-              tabIndex={-1}>
-              {showPassword ? (
-                <EyeOff className="w-4 h-4" />
-              ) : (
-                <Eye className="w-4 h-4" />
-              )}
-            </button>
-          )}
-        </>
-      )}
+        ) : (
+          <>
+            <input
+              {...getInputProps()}
+              className={`w-full h-full bg-[#232a3a] border border-[#2a3441] rounded-lg px-3 pt-5 pb-1 text-white text-sm focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent ${
+                type === "password" ? "pr-10" : ""
+              }`}
+            />
+            {type === "password" && (
+              <button
+                type="button"
+                onClick={togglePasswordVisibility}
+                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-[#e6eaf3]/60 hover:text-[#e6eaf3] transition-colors"
+                tabIndex={-1}>
+                {showPassword ? (
+                  <EyeOff className="w-4 h-4" />
+                ) : (
+                  <Eye className="w-4 h-4" />
+                )}
+              </button>
+            )}
+          </>
+        )}
+      </div>
+      {error && <p className="text-red-400 text-xs mt-1 px-1">{error}</p>}
     </div>
   );
 };

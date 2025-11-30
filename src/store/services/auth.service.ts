@@ -16,3 +16,18 @@ export const validate = async (
     throw e;
   }
 };
+
+export const sendPasswordRecoveryEmail = async (
+  rut: string,
+  email: string
+): Promise<IDataResponse> => {
+  try {
+    const { data } = await apiAuthInstance.post(`/user/sendPasswordReset`, {
+      rut,
+      email,
+    });
+    return data;
+  } catch (e) {
+    throw e;
+  }
+};

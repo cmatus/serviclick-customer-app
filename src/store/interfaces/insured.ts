@@ -92,6 +92,7 @@ export interface Assistance {
   currency: string;
   events: number;
   lack: number;
+  isRefundable: boolean;
   used: Used;
 }
 
